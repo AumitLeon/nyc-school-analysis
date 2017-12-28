@@ -11,6 +11,7 @@ import numpy as np
 #from keras import regularizers
 #from keras.utils import np_utils, generic_utils
 import pandas as pd
+from collections import Counter
 
 def readTxt(filename):
     count = 0
@@ -39,7 +40,7 @@ def readTxt(filename):
         numb_taken = df['Num of SAT Test Takers'].tolist()
         reading_score = df['SAT Critical Reading Avg. Score'].tolist()
         math_score = df['SAT Math Avg. Score'].tolist()
-        writing_score = df['SAT Math Avg. Score'].tolist()
+        writing_score = df['SAT Writing Avg. Score'].tolist()
         dbn = df['DBN'].tolist()
 
         
@@ -88,41 +89,73 @@ def plotDistricts(districts):
 def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
     avgScores = {}
     temp_counter = 0
+    counts = Counter(dist)
+    #print counts['02']
    
     temp_dist = ""
     for i, sat_math, sat_reading, sat_writing in zip(dist, math, read, write):
         if i not in avgScores:
+            #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
             avgScores[i] = float(sat_math) + float(sat_reading) + float(sat_writing)
-            print avgScores[i]
+            #print i
             temp_counter += 1
         else:  
-            #print name[i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
+            #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
+            #print i
+            #print avgScores[i]
             avgScores[i] += float(sat_math) + float(sat_reading) + float(sat_writing)
+    
             temp_counter += 1
-        if temp_dist != i and temp_dist != "":
-           # print "haha"
-            avgScores[temp_dist] = avgScores[temp_dist] / temp_counter
-            print temp_counter
-            temp_counter = 1
+
+        if (temp_dist != i and temp_dist != ""):
+            #print i
+            #print temp_counter
+           # print avgScores[temp_dist]
+            avgScores[temp_dist] = avgScores[temp_dist] / counts[temp_dist]
+            #print avgScores[temp_dist]
+            #print temp_dist
+            #print counts[temp_dist]
+           # print i
+            print
+        elif i == dist[len(dist)-1]:
+            #print avgScores[i]
+            avgScores[i] = avgScores[i] / counts[i]
+            #print i
+            #print counts[i]
+            #print
+            #print
+           # print temp_counter
+            #temp_counter = 0
+        #elif dist.index(i) == 421:
+         #   print "lol"
+        #print dist.index(i)
+
 
         temp_dist = i
-
-    print avgScores
+    #print avgScores
+    return avgScores
 
 def printScores(dbn, dist, borough, name, taken, read, math, write):
     print "NAME -- READING -- MATH -- WRITE"
     for x in range(len(dbn)):
         print name[x] + " -- " + read[x] + " -- " + math[x] + " -- " + write[x]
 
+def scoresByDist(scores):
+    for item in scores:
+        print str(item) + " ------ " + str(scores[item])
+
 if __name__ == "__main__":
     filename = "/mnt/c/Users/Aumit/Documents/2012_SAT_Results.csv"
     school_dbn, district_vals, boroughs, names, taken, read, math, write = readTxt(filename)
+    #print district_vals
     # validating list lengths
-    print len(school_dbn)
-    print len(district_vals)
-    print len(boroughs)
-    print len(read)
-    print len(math)
-    print len(write)
-    calculateAverages(school_dbn, district_vals, boroughs, names, taken, read, math, write)
+    #print len(school_dbn)
+    #print len(district_vals)
+    #print len(boroughs)
+    #print len(read)
+    #print len(math)
+    #print len(write)
+    scores = calculateAverages(school_dbn, district_vals, boroughs, names, taken, read, math, write)
+    #scoresByDist(scores)
+
     #printScores(school_dbn, district_vals, boroughs, names, taken, read, math, write)
