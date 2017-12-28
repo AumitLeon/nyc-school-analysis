@@ -92,7 +92,7 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
     counts = Counter(dist)
     #print counts['02']
    
-    temp_dist = ""
+    """temp_dist = ""
     for i, sat_math, sat_reading, sat_writing in zip(dist, math, read, write):
         if i not in avgScores:
             #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
@@ -110,25 +110,62 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
         if (temp_dist != i and temp_dist != ""):
             #print i
             #print temp_counter
-           # print avgScores[temp_dist]
+            print avgScores[temp_dist]
             avgScores[temp_dist] = avgScores[temp_dist] / counts[temp_dist]
             #print avgScores[temp_dist]
-            #print temp_dist
-            #print counts[temp_dist]
+            print temp_dist
+            print counts[temp_dist]
            # print i
             print
         elif i == dist[len(dist)-1]:
-            #print avgScores[i]
+            print avgScores[i]
             avgScores[i] = avgScores[i] / counts[i]
+            print i
+            print counts[i]
+            #print
+            #print
+           # print temp_counter
+            #temp_counter = 0
+        #elif dist.index(i) == 421:
+         #   print "lol"""
+
+    temp_dist = 0
+    for i in range(len(dist)):
+        if dist[i] not in avgScores:
+            #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
+            avgScores[dist[i]] = float(math[i]) + float(read[i]) + float(write[i])
             #print i
-            #print counts[i]
+            temp_counter += 1
+        else:  
+            #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
+            #print i
+            #print avgScores[i]
+            avgScores[dist[i]] += float(math[i]) + float(read[i]) + float(write[i])
+    
+            temp_counter += 1
+
+        if (dist[temp_dist] != dist[i] and temp_dist != 0):
+            #print i
+            #print temp_counter
+            #print avgScores[dist[temp_dist]]
+            avgScores[dist[temp_dist]] = avgScores[dist[temp_dist]] / counts[dist[temp_dist]]
+            #print avgScores[temp_dist]
+            #print temp_dist
+            #print counts[dist[temp_dist]]
+           # print i
+            #print
+        elif i == len(dist)-1:
+            #print avgScores[dist[i]]
+            avgScores[dist[i]] = avgScores[dist[i]] / counts[dist[i]]
+            #print i
+            #print counts[dist[i]]
             #print
             #print
            # print temp_counter
             #temp_counter = 0
         #elif dist.index(i) == 421:
          #   print "lol"
-        #print dist.index(i)
+
 
 
         temp_dist = i
@@ -156,6 +193,6 @@ if __name__ == "__main__":
     #print len(math)
     #print len(write)
     scores = calculateAverages(school_dbn, district_vals, boroughs, names, taken, read, math, write)
-    #scoresByDist(scores)
+    scoresByDist(scores)
 
     #printScores(school_dbn, district_vals, boroughs, names, taken, read, math, write)
