@@ -3,7 +3,7 @@
 This project depends on NYC school data from : https://data.cityofnewyork.us/Education/2012-SAT-Results/f9bf-2cp4
 
 ### Initial Results: 
-
+<center>
 | District      | Cumulative SAT Score  |
 | ------------- |:---------------------:| 
 | 30            | 1339.25               | 
@@ -40,3 +40,4 @@ This project depends on NYC school data from : https://data.cityofnewyork.us/Edu
 | 31            | 1359.16666667         |  
 | 23            | 1085.16666667         |
 | 32            | 1107.28571429         |         
+</center>
