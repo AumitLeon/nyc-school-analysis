@@ -4,8 +4,8 @@ This project depends on NYC school data from : https://data.cityofnewyork.us/Edu
 
 ### Initial Results: 
 
-| District      | Cumulative SAT Score  | Math | Reading | Writing | Number Taken|
-Creating bargraph for district frequency--
+| District      | Cumulative SAT Score  | Math  | Reading  | Writing  | Number Taken  |
+| ------------- |:---------------------:| -----:| --------:| --------:| -------------:|
 | 01 | 1305 | 468 | 423 | 413 | 660 |
 | 02 | 1284 | 441 | 424 | 419 | 6175 |
 | 03 | 1267 | 426 | 424 | 417 | 1414 |
