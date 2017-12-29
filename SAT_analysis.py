@@ -91,6 +91,7 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
     avgMath = {}
     avgReading = {}
     avgWriting = {}
+    totTaken = {}
     temp_counter = 0
     counts = Counter(dist)
     #print counts['02']
@@ -140,6 +141,7 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
             avgMath[dist[i]] = int(math[i])
             avgReading[dist[i]] = int(read[i])
             avgWriting[dist[i]] = int(write[i])
+            totTaken[dist[i]] = int(taken[i])
             #print i
             temp_counter += 1
         else:  
@@ -150,6 +152,7 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
             avgMath[dist[i]] += int(math[i])
             avgReading[dist[i]] += int(read[i])
             avgWriting[dist[i]] += int(write[i])
+            totTaken[dist[i]] += int(taken[i])
             temp_counter += 1
 
         if (dist[temp_dist] != dist[i] and temp_dist != 0):
@@ -184,16 +187,24 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
 
         temp_dist = i
     #print avgScores
-    return avgScores, avgMath, avgReading, avgWriting
+    return avgScores, avgMath, avgReading, avgWriting, totTaken
 
 def printScores(dbn, dist, borough, name, taken, read, math, write):
     print "NAME -- READING -- MATH -- WRITE"
     for x in range(len(dbn)):
         print name[x] + " -- " + read[x] + " -- " + math[x] + " -- " + write[x]
 
-def scoresByDist(scores, math, read, write):
+def scoresByDist(scores, math, read, write, taken):
     for item in scores:
-        print str(item) + " -------------- " + str(scores[item]) + " -------------- " + str(math[item]) + " -------------- " + str(read[item]) + " -------------- " + str(write[item])
+        print str(item) + " -------------- " + str(scores[item]) + " -------------- " + str(math[item]) + " -------------- " + str(read[item]) + " -------------- " + str(write[item]) + " -------------- " + str(taken[item])
+
+def combineLists(scores, math, read, write, taken):
+    combined_scores = {}
+    for item in scores:
+        combined_scores[item] = [scores[item], math[item], read[item], write[item], taken[item]]
+
+    for elem in combined_scores:
+        print str(elem) + " ---- " + str(combined_scores[elem][0]) + " ---- " + str(combined_scores[elem][1]) + " ---- " + str(combined_scores[elem][2]) + " ---- " + str(combined_scores[elem][3]) + " ---- " + str(combined_scores[elem][4])
 
 if __name__ == "__main__":
     filename = "/mnt/c/Users/Aumit/Documents/2012_SAT_Results.csv"
@@ -206,7 +217,7 @@ if __name__ == "__main__":
     #print len(read)
     #print len(math)
     #print len(write)
-    tot_scores, math_scores, reading_scores, writing_scores = calculateAverages(school_dbn, district_vals, boroughs, names, taken, read, math, write)
-    scoresByDist(tot_scores, math_scores, reading_scores, writing_scores)
+    tot_scores, math_scores, reading_scores, writing_scores, total_taken = calculateAverages(school_dbn, district_vals, boroughs, names, taken, read, math, write)
+    combineLists(tot_scores, math_scores, reading_scores, writing_scores, total_taken)
 
     #printScores(school_dbn, district_vals, boroughs, names, taken, read, math, write)
