@@ -88,6 +88,9 @@ def plotDistricts(districts):
 
 def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
     avgScores = {}
+    avgMath = {}
+    avgReading = {}
+    avgWriting = {}
     temp_counter = 0
     counts = Counter(dist)
     #print counts['02']
@@ -133,15 +136,20 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
     for i in range(len(dist)):
         if dist[i] not in avgScores:
             #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
-            avgScores[dist[i]] = float(math[i]) + float(read[i]) + float(write[i])
+            avgScores[dist[i]] = int(math[i]) + int(read[i]) + int(write[i])
+            avgMath[dist[i]] = int(math[i])
+            avgReading[dist[i]] = int(read[i])
+            avgWriting[dist[i]] = int(write[i])
             #print i
             temp_counter += 1
         else:  
             #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
             #print i
             #print avgScores[i]
-            avgScores[dist[i]] += float(math[i]) + float(read[i]) + float(write[i])
-    
+            avgScores[dist[i]] += int(math[i]) + int(read[i]) + int(write[i])
+            avgMath[dist[i]] += int(math[i])
+            avgReading[dist[i]] += int(read[i])
+            avgWriting[dist[i]] += int(write[i])
             temp_counter += 1
 
         if (dist[temp_dist] != dist[i] and temp_dist != 0):
@@ -149,6 +157,9 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
             #print temp_counter
             #print avgScores[dist[temp_dist]]
             avgScores[dist[temp_dist]] = avgScores[dist[temp_dist]] / counts[dist[temp_dist]]
+            avgMath[dist[temp_dist]] = avgMath[dist[temp_dist]] / counts[dist[temp_dist]]
+            avgReading[dist[temp_dist]] = avgReading[dist[temp_dist]] / counts[dist[temp_dist]]
+            avgWriting[dist[temp_dist]] = avgWriting[dist[temp_dist]] / counts[dist[temp_dist]]
             #print avgScores[temp_dist]
             #print temp_dist
             #print counts[dist[temp_dist]]
@@ -157,6 +168,9 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
         elif i == len(dist)-1:
             #print avgScores[dist[i]]
             avgScores[dist[i]] = avgScores[dist[i]] / counts[dist[i]]
+            avgMath[dist[temp_dist]] = avgMath[dist[temp_dist]] / counts[dist[temp_dist]]
+            avgReading[dist[temp_dist]] = avgReading[dist[temp_dist]] / counts[dist[temp_dist]]
+            avgWriting[dist[temp_dist]] = avgWriting[dist[temp_dist]] / counts[dist[temp_dist]]
             #print i
             #print counts[dist[i]]
             #print
@@ -170,16 +184,16 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
 
         temp_dist = i
     #print avgScores
-    return avgScores
+    return avgScores, avgMath, avgReading, avgWriting
 
 def printScores(dbn, dist, borough, name, taken, read, math, write):
     print "NAME -- READING -- MATH -- WRITE"
     for x in range(len(dbn)):
         print name[x] + " -- " + read[x] + " -- " + math[x] + " -- " + write[x]
 
-def scoresByDist(scores):
+def scoresByDist(scores, math, read, write):
     for item in scores:
-        print str(item) + " ------ " + str(scores[item])
+        print str(item) + " -------------- " + str(scores[item]) + " -------------- " + str(math[item]) + " -------------- " + str(read[item]) + " -------------- " + str(write[item])
 
 if __name__ == "__main__":
     filename = "/mnt/c/Users/Aumit/Documents/2012_SAT_Results.csv"
@@ -192,7 +206,7 @@ if __name__ == "__main__":
     #print len(read)
     #print len(math)
     #print len(write)
-    scores = calculateAverages(school_dbn, district_vals, boroughs, names, taken, read, math, write)
-    scoresByDist(scores)
+    tot_scores, math_scores, reading_scores, writing_scores = calculateAverages(school_dbn, district_vals, boroughs, names, taken, read, math, write)
+    scoresByDist(tot_scores, math_scores, reading_scores, writing_scores)
 
     #printScores(school_dbn, district_vals, boroughs, names, taken, read, math, write)
