@@ -12,6 +12,7 @@ import numpy as np
 #from keras.utils import np_utils, generic_utils
 import pandas as pd
 from collections import Counter
+import collections
 
 def readTxt(filename):
     count = 0
@@ -203,8 +204,9 @@ def combineLists(scores, math, read, write, taken):
     for item in scores:
         combined_scores[item] = [scores[item], math[item], read[item], write[item], taken[item]]
 
-    for elem in combined_scores:
-        print str(elem) + " ---- " + str(combined_scores[elem][0]) + " ---- " + str(combined_scores[elem][1]) + " ---- " + str(combined_scores[elem][2]) + " ---- " + str(combined_scores[elem][3]) + " ---- " + str(combined_scores[elem][4])
+    combined_sorted = collections.OrderedDict(sorted(combined_scores.items()))
+    for elem in combined_sorted:
+        print str(elem) + " ---- " + str(combined_sorted[elem][0]) + " ---- " + str(combined_sorted[elem][1]) + " ---- " + str(combined_sorted[elem][2]) + " ---- " + str(combined_sorted[elem][3]) + " ---- " + str(combined_sorted[elem][4])
 
 if __name__ == "__main__":
     filename = "/mnt/c/Users/Aumit/Documents/2012_SAT_Results.csv"
