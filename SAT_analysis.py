@@ -14,6 +14,10 @@ import pandas as pd
 from collections import Counter
 import collections
 
+# Extract data from the CSV file
+# Extracts data into multiple lists, each of the same length
+# Mapping between lists is maintained by index
+# i.e, every index maintains corresponds to a particular data point
 def readTxt(filename):
     count = 0
     dbn = []
@@ -76,6 +80,7 @@ def readTxt(filename):
     plotDistricts(districts)
     return dbn, school_dist, school_borough, school_name, numb_taken, reading_score, math_score, writing_score
 
+# Plot a bargraph of the distribution of districts
 def plotDistricts(districts):
     print ("Creating bargraph for district frequency--")
 
@@ -87,6 +92,7 @@ def plotDistricts(districts):
     plt.title("Districts")
     plt.savefig("districts.png")
 
+# Calculate average scores by distrcit
 def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
     avgScores = {}
     avgMath = {}
@@ -95,47 +101,13 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
     totTaken = {}
     temp_counter = 0
     counts = Counter(dist)
-    #print counts['02']
-   
-    """temp_dist = ""
-    for i, sat_math, sat_reading, sat_writing in zip(dist, math, read, write):
-        if i not in avgScores:
-            #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
-            avgScores[i] = float(sat_math) + float(sat_reading) + float(sat_writing)
-            #print i
-            temp_counter += 1
-        else:  
-            #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
-            #print i
-            #print avgScores[i]
-            avgScores[i] += float(sat_math) + float(sat_reading) + float(sat_writing)
-    
-            temp_counter += 1
-
-        if (temp_dist != i and temp_dist != ""):
-            #print i
-            #print temp_counter
-            print avgScores[temp_dist]
-            avgScores[temp_dist] = avgScores[temp_dist] / counts[temp_dist]
-            #print avgScores[temp_dist]
-            print temp_dist
-            print counts[temp_dist]
-           # print i
-            print
-        elif i == dist[len(dist)-1]:
-            print avgScores[i]
-            avgScores[i] = avgScores[i] / counts[i]
-            print i
-            print counts[i]
-            #print
-            #print
-           # print temp_counter
-            #temp_counter = 0
-        #elif dist.index(i) == 421:
-         #   print "lol"""
 
     temp_dist = 0
+    
+    # Loop through the lists in parallel
     for i in range(len(dist)):
+
+        # If a district hasn't been encountered yet
         if dist[i] not in avgScores:
             #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
             avgScores[dist[i]] = int(math[i]) + int(read[i]) + int(write[i])
@@ -145,6 +117,8 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
             totTaken[dist[i]] = int(taken[i])
             #print i
             temp_counter += 1
+
+        # If a district has been encountered already
         else:  
             #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
             #print i
@@ -155,7 +129,8 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
             avgWriting[dist[i]] += int(write[i])
             totTaken[dist[i]] += int(taken[i])
             temp_counter += 1
-
+        
+        # Calculate the average if it's the last school in a particular distrcit
         if (dist[temp_dist] != dist[i] and temp_dist != 0):
             #print i
             #print temp_counter
@@ -169,6 +144,7 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
             #print counts[dist[temp_dist]]
            # print i
             #print
+        # Special case for the last distrcit
         elif i == len(dist)-1:
             #print avgScores[dist[i]]
             avgScores[dist[i]] = avgScores[dist[i]] / counts[dist[i]]
@@ -190,23 +166,28 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
     #print avgScores
     return avgScores, avgMath, avgReading, avgWriting, totTaken
 
+# Print all the scores
 def printScores(dbn, dist, borough, name, taken, read, math, write):
     print "NAME -- READING -- MATH -- WRITE"
     for x in range(len(dbn)):
         print name[x] + " -- " + read[x] + " -- " + math[x] + " -- " + write[x]
 
+#  Print the scores by distrcit
 def scoresByDist(scores, math, read, write, taken):
     for item in scores:
         print str(item) + " -------------- " + str(scores[item]) + " -------------- " + str(math[item]) + " -------------- " + str(read[item]) + " -------------- " + str(write[item]) + " -------------- " + str(taken[item])
 
+# Combine the data-lists into a single dictionary
+# Mapping preserved by index value between multiple lists is now maintained by a single key-- the distrcit.
 def combineLists(scores, math, read, write, taken):
     combined_scores = {}
     for item in scores:
         combined_scores[item] = [scores[item], math[item], read[item], write[item], taken[item]]
 
     combined_sorted = collections.OrderedDict(sorted(combined_scores.items()))
+
     for elem in combined_sorted:
-        print str(elem) + " ---- " + str(combined_sorted[elem][0]) + " ---- " + str(combined_sorted[elem][1]) + " ---- " + str(combined_sorted[elem][2]) + " ---- " + str(combined_sorted[elem][3]) + " ---- " + str(combined_sorted[elem][4])
+        print "| " + str(elem) + " | " + str(combined_sorted[elem][0]) + " | " + str(combined_sorted[elem][1]) + " | " + str(combined_sorted[elem][2]) + " | " + str(combined_sorted[elem][3]) + " | " + str(combined_sorted[elem][4]) + " |"
 
 if __name__ == "__main__":
     filename = "/mnt/c/Users/Aumit/Documents/2012_SAT_Results.csv"
