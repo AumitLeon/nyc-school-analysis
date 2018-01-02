@@ -41,18 +41,14 @@ def readTxt(filename):
                     final_name += seg
                 temp_names[k] = final_name
                 #print temp_names[k]
+
+        # Get features as seperate lists
         school_name = temp_names
         numb_taken = df['Num of SAT Test Takers'].tolist()
         reading_score = df['SAT Critical Reading Avg. Score'].tolist()
         math_score = df['SAT Math Avg. Score'].tolist()
         writing_score = df['SAT Writing Avg. Score'].tolist()
         dbn = df['DBN'].tolist()
-
-        
-        print len(numb_taken)
-        print len(writing_score)
-        print len(math_score)
-        print len(reading_score)
 
         for g,r,e,p,q in zip(reading_score, math_score, writing_score, numb_taken, dbn):
            # print g
@@ -109,20 +105,15 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
 
         # If a district hasn't been encountered yet
         if dist[i] not in avgScores:
-            #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
             avgScores[dist[i]] = int(math[i]) + int(read[i]) + int(write[i])
             avgMath[dist[i]] = int(math[i])
             avgReading[dist[i]] = int(read[i])
             avgWriting[dist[i]] = int(write[i])
             totTaken[dist[i]] = int(taken[i])
-            #print i
             temp_counter += 1
 
         # If a district has been encountered already
         else:  
-            #print i + " -- " + sat_reading + " -- " + sat_math + " -- " + sat_writing
-            #print i
-            #print avgScores[i]
             avgScores[dist[i]] += int(math[i]) + int(read[i]) + int(write[i])
             avgMath[dist[i]] += int(math[i])
             avgReading[dist[i]] += int(read[i])
@@ -132,38 +123,20 @@ def calculateAverages(dbn, dist, borough, name, taken, read, math, write):
         
         # Calculate the average if it's the last school in a particular distrcit
         if (dist[temp_dist] != dist[i] and temp_dist != 0):
-            #print i
-            #print temp_counter
-            #print avgScores[dist[temp_dist]]
             avgScores[dist[temp_dist]] = avgScores[dist[temp_dist]] / counts[dist[temp_dist]]
             avgMath[dist[temp_dist]] = avgMath[dist[temp_dist]] / counts[dist[temp_dist]]
             avgReading[dist[temp_dist]] = avgReading[dist[temp_dist]] / counts[dist[temp_dist]]
             avgWriting[dist[temp_dist]] = avgWriting[dist[temp_dist]] / counts[dist[temp_dist]]
-            #print avgScores[temp_dist]
-            #print temp_dist
-            #print counts[dist[temp_dist]]
-           # print i
-            #print
-        # Special case for the last distrcit
+            
+        # Special case for the last district
         elif i == len(dist)-1:
-            #print avgScores[dist[i]]
             avgScores[dist[i]] = avgScores[dist[i]] / counts[dist[i]]
             avgMath[dist[temp_dist]] = avgMath[dist[temp_dist]] / counts[dist[temp_dist]]
             avgReading[dist[temp_dist]] = avgReading[dist[temp_dist]] / counts[dist[temp_dist]]
             avgWriting[dist[temp_dist]] = avgWriting[dist[temp_dist]] / counts[dist[temp_dist]]
-            #print i
-            #print counts[dist[i]]
-            #print
-            #print
-           # print temp_counter
-            #temp_counter = 0
-        #elif dist.index(i) == 421:
-         #   print "lol"
-
-
 
         temp_dist = i
-    #print avgScores
+
     return avgScores, avgMath, avgReading, avgWriting, totTaken
 
 # Print all the scores
@@ -192,14 +165,7 @@ def combineLists(scores, math, read, write, taken):
 if __name__ == "__main__":
     filename = "/mnt/c/Users/Aumit/Documents/2012_SAT_Results.csv"
     school_dbn, district_vals, boroughs, names, taken, read, math, write = readTxt(filename)
-    #print district_vals
-    # validating list lengths
-    #print len(school_dbn)
-    #print len(district_vals)
-    #print len(boroughs)
-    #print len(read)
-    #print len(math)
-    #print len(write)
+
     tot_scores, math_scores, reading_scores, writing_scores, total_taken = calculateAverages(school_dbn, district_vals, boroughs, names, taken, read, math, write)
     combineLists(tot_scores, math_scores, reading_scores, writing_scores, total_taken)
 
